@@ -1,11 +1,12 @@
 <?php
+require_once "vendor/autoload.php";
 
 use App\App;
+use App\MyDB as DB;
 
+$db = new DB();
+$app = new App($db);
 
-$file_hash = $_GET['file'];
-$ip = $_SERVER['HTTP_CLIENT_IP'];
-
-App::setLiveStatus($file, $ip);
+$app->setLiveStatus();
 
 ?>

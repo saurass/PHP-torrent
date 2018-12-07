@@ -1,9 +1,9 @@
 <?php
+error_reporting(0);
+require_once "vendor/autoload.php";
 
 use App\App;
 use App\MyDB as DB;
-
-require_once "vendor/autoload.php";
 /*
 |===============================================
 |   ignite App here using App::boot()

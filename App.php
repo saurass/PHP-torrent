@@ -1,7 +1,6 @@
 <?php
 namespace App;
 
-use SNMP;
 class App
 {
 	public $db;
@@ -11,17 +10,19 @@ class App
 	}
 
 	public function boot() {
-		$this->findFiles();
 		$this->checkServerConfig();
+		$this->findFiles();
 	}
 
 	public function findFiles() {
 		$all_files = [];
 		$query = "SELECT * FROM files WHERE status = '1'";
 		$result = $this->db->query($query);
+		require_once 'main-top.php';
 		while ($row = mysqli_fetch_assoc($result)) {
 			$this->printTemplate($row);
 		}
+		require_once 'main-bottom.php';
 	}
 
 	public function checkServerConfig() {
@@ -34,6 +35,7 @@ class App
 			fwrite($handle, $get_config);
 			fclose($handle);
 			require 'firstTime.php';
+			die();
 		}
 	}
 
@@ -49,9 +51,21 @@ class App
 		echo $content;
 	}
 
-	public static function setLiveStatus($file_hash, $server_loc) {
-		$query = "UPDATE files SET status='1' WHERE file_hash = '$file_hash' AND sever_loc = '$server_loc'";
-		$this->db->query($query);
+	public function setLiveStatus() {
+		$ip = gethostbyname(trim(`hostname`));
+		$query = "SELECT * FROM files WHERE server_loc = '$ip'";
+		$result = $this->db->query($query);
+		while($row = mysqli_fetch_assoc($result)) {
+			$fh = $row['file_hash'];
+			if (!file_exists($row['file_loc'])) {
+				$qrm = "UPDATE files set status = '0' WHERE server_loc = '$ip' AND file_hash = '$fh'";
+				$this->db->query($qrm);
+			} else {
+				$qrm = "UPDATE files set status = '1' WHERE server_loc = '$ip' AND file_hash = '$fh'";
+				$this->db->query($qrm);
+			}
+		}
+		echo "Y";
 	}
 
 }

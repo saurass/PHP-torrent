@@ -1,15 +1,12 @@
 <?php
 namespace App;
 
-
-use SQLite3;
-
 class MyDB implements DBConnection
 {
 	private $conn;
 
 	function __construct() {
-		$this->conn = mysqli_connect('host', 'user', 'pass', 'tble');
+		$this->conn = mysqli_connect('sql12.freemysqlhosting.net', 'sql12268939', 'qvZkzjgz9C', 'sql12268939');
 	}
 
 	public function query($query) {
