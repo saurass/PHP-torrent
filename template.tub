@@ -1,0 +1,11 @@
+<div style="width: 100%;background-color: pink;padding-top: 2px;padding-bottom: 2px;margin-top:10px;padding-left:10px;margin-right:10px">
+	<h2>TITLE</h2>
+	<form action="http://SERVER_LOC:80/downloaderme.php" method="post">
+		SERVER_LOC
+		<input type="hidden" name="file_hash" value="FILE_HASH">
+		<input type="hidden" name="mime_type" value="MIME_TYPE">
+		<input type="hidden" name="orig_name" value="ORIG_NAME">
+		<input type="hidden" name="file_loc" value="FILE_LOC">
+		<input type="submit" value="DOWNLOAD">
+	</form>
+</div>
