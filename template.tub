@@ -6,7 +6,7 @@
           <span class="right small-text">MIME_TYPE</span>
         </div>
         <div class="card-action clearfix">
-	<form action="http://SERVER_LOC:80/downloaderme.php" method="post">
+	<form action="http://SERVER_LOC:8077/downloaderme.php" method="post">
 		<input type="hidden" name="file_hash" value="FILE_HASH">
 		<input type="hidden" name="mime_type" value="MIME_TYPE">
 		<input type="hidden" name="orig_name" value="ORIG_NAME">

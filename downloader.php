@@ -33,7 +33,8 @@ function readfile_chunked($filename, $retbytes = TRUE) {
     while (!feof($handle)) {
         $buffer = fread($handle, CHUNK_SIZE);
         echo $buffer;
-        ob_flush();
+        // Never use this
+        // ob_flush();
         flush();
         if ($retbytes) {
             $cnt += strlen($buffer);
