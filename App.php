@@ -12,15 +12,17 @@ class App
 	public function boot() {
 		$this->setLiveStatus();
 		$this->startInBackground();
-		$this->checkServerConfig();
 		require_once 'main-top.php';
 		$this->findFiles();
 		require_once 'main-bottom.php';
 	}
 
 	public function startInBackground() {
-		$host = gethostbyname(trim(`hostname`));
-		$cmd = "cmd /C cd.. && cd php && php -S $host:8077 -t ../www";
+		$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8077 -t ../www";
+		$WshShell = new COM("WScript.Shell");
+		$oExec = $WshShell->Run($cmd, 0, false);
+
+		$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8099 -t ../www";
 		$WshShell = new COM("WScript.Shell");
 		$oExec = $WshShell->Run($cmd, 0, false);
 	}
@@ -31,20 +33,6 @@ class App
 		$result = $this->db->query($query);
 		while ($row = mysqli_fetch_assoc($result)) {
 			$this->printTemplate($row);
-		}
-	}
-
-	public function checkServerConfig() {
-		$host = gethostbyname(trim(`hostname`));
-		$str = '["'.$host.'", 8066]';
-		$get_config = file_get_contents('../settings.json');
-		if(strpos($get_config,  '["127.0.0.1", 0]')){
-			$get_config = str_replace('["127.0.0.1", 0]', $str, $get_config);
-			$handle = fopen('../settings.json', 'w');
-			fwrite($handle, $get_config);
-			fclose($handle);
-			require 'firstTime.php';
-			die();
 		}
 	}
 

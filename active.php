@@ -7,6 +7,9 @@ use App\MyDB as DB;
 $db = new DB();
 $app = new App($db);
 
-$app->setLiveStatus();
+while(1) {
+	sleep(5);
+	$app->setLiveStatus();
+}
 
 ?>

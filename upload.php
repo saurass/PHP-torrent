@@ -1,36 +1,45 @@
 <?php
+    use App\MyDB;
+    require_once 'DBInterface.php';
+    require_once 'connect.php';
+    $db = new MyDB();
 
-	$user = explode('\\', $_SERVER['DOCUMENT_ROOT'])[2];
-	$loc = "C:\\Users\\$user\\Documents\\share\\";
-	if(!is_dir($loc))
-		mkdir($loc);
-    move_uploaded_file($_FILES['file']['tmp_name'], $loc.$_FILES['file']['name']);
+    if (isset($_GET['next_dir'])) {
+        $dir = $_GET['next_dir'];
+        if(!is_dir($dir) and is_file($dir))
+            processShare($dir, $db);
+        else
+            echo "Something is wrong !!!";
+    } else {
+        echo "FILE FORMAT NOT CORRECT !!!";
+    }
 
-    $title = $_POST['title'];
-    $file_hash = generateRandomString(32);
-    $mime_type = get_mime_type($loc.$_FILES['file']['name']);
-    $orig_name = $_FILES['file']['name'];
+
+function processShare($file, $db) {
+    $idx = explode( '.', $file);
+    $count_explode = count($idx);
+    $idx = strtolower($idx[$count_explode-1]);
+
+
+    $title = basename($file, '.'.$idx);
+    $file_hash = generateRandomString(6);
+    $mime_type = get_mime_type($file);
+    $orig_name = basename($file);
     $server_pub = file_get_contents('https://api.ipify.org');
     $server_loc = gethostbyname(trim(`hostname`));
-    $file_loc = str_replace('\\', '\\\\', $loc.$_FILES['file']['name']);
+    $file_loc = str_replace('\\', '\\\\', $file);
     $status = '1';
     $created_at = time();
     $updated_at = time();
 
-    $conn = mysqli_connect('sql12.freemysqlhosting.net', 'sql12268939', 'qvZkzjgz9C', 'sql12268939');
+
     $query = "INSERT INTO files VALUES ('', '$title', '$file_hash', '$mime_type', '$orig_name', '$server_loc', '$server_pub', '$file_loc', '$status', '$created_at', '$updated_at')";
-    mysqli_query($conn, $query);
 
-    function generateRandomString($length = 20) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
+    $db->query($query);
+    echo "Sharing Your File !!!!";
+
+
 }
-
 
 function get_mime_type($filename) {
     $idx = explode( '.', $filename );
@@ -103,5 +112,18 @@ function get_mime_type($filename) {
      return 'application/octet-stream';
     }
  }
+
+
+function generateRandomString($length = 20) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+
 
 ?>
