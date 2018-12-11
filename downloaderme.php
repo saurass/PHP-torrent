@@ -1,8 +1,18 @@
 <?php
+require_once 'mysqlite_connect.php';
 
-$filename = $_POST['file_loc'];
-$mime_type = $_POST['mime_type'];
-$orig_name = $_POST['orig_name'];
+$db = new MyLiteDB();
+$file_hash = $_GET['file_hash'];
+$filename = getFileLoc($db, $file_hash);
+
 require_once 'downloader.php';
+
+
+function getFileLoc($db, $file_hash) {
+	$qrm = "SELECT location FROM files WHERE file_hash = '$file_hash'";
+	$res = $db->query($qrm);
+	$row = $res->fetchArray(SQLITE3_ASSOC);
+	return $row['location'];
+}
 
 ?>

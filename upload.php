@@ -35,7 +35,10 @@ function processShare($file, $db) {
 
     $query = "INSERT INTO files VALUES ('', '$title', '$file_hash', '$mime_type', '$orig_name', '$server_loc', '$server_pub', '$file_loc', '$status', '$created_at', '$updated_at')";
 
+    $query2 = "INSERT INTO files VALUES ('$title', '$file_hash', '$mime_type', '$orig_name', '$file_loc')"; 
+
     $db->query($query);
+    $db->exec($query2);
     echo "Sharing Your File !!!!";
 
 

@@ -18,13 +18,17 @@ class App
 	}
 
 	public function startInBackground() {
-		$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8077 -t ../www";
-		$WshShell = new COM("WScript.Shell");
-		$oExec = $WshShell->Run($cmd, 0, false);
 
-		$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8099 -t ../www";
-		$WshShell = new COM("WScript.Shell");
-		$oExec = $WshShell->Run($cmd, 0, false);
+		if(!$this->ping('127.0.0.1:8077/test.php')) {
+			$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8077 -t ../www";
+			$WshShell = new COM("WScript.Shell");
+			$oExec = $WshShell->Run($cmd, 0, false);
+		}
+		if(!$this->ping('127.0.0.1:8099/test.php')) {
+			$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8099 -t ../www";
+			$WshShell = new COM("WScript.Shell");
+			$oExec = $WshShell->Run($cmd, 0, false);
+		}
 	}
 
 	public function findFiles() {
@@ -63,6 +67,24 @@ class App
 				$this->db->query($qrm);
 			}
 		}
+	}
+
+	public function ping($url)
+	{
+        $timeout = 10;
+		$ch = curl_init();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt ( $ch, CURLOPT_TIMEOUT, $timeout );
+		$http_respond = curl_exec($ch);
+		$http_respond = trim( strip_tags( $http_respond ) );
+		$http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+		if ( ( $http_code == "200" ) || ( $http_code == "302" ) ) {
+			return true;
+		} else {
+		    return false;
+		}
+		curl_close( $ch );
 	}
 
 }

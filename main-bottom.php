@@ -27,8 +27,8 @@
 			    xmlhttp.open("GET", "http://localhost:8077/active.php", true);
 			    xmlhttp.send();
 			}
-			// setInterval(requestActive, 10000);
-			requestActive();
+			setInterval(requestActive, 10000);
+			// requestActive();
 
 			function refreshFiles(){
 				var xmlhttp = new XMLHttpRequest();
@@ -63,6 +63,17 @@
 			        }
 			    };
 			    xmlhttp.open("GET", "upload.php?next_dir=" + dir, true);
+			    xmlhttp.send();
+			}
+
+			function dwdStart(filehash) {
+				var xmlhttp = new XMLHttpRequest();
+			    xmlhttp.onreadystatechange = function() {
+			        if (this.readyState == 4 && this.status == 200) {
+			            
+			        }
+			    };
+			    xmlhttp.open("GET", "dwdstart.php?file_hash=" + filehash, true);
 			    xmlhttp.send();
 			}
 

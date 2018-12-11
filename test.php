@@ -1,5 +1,3 @@
-<pre>
 <?php
-	print_r($_SERVER);
+echo "1";
 ?>
-</pre>
