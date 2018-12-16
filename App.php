@@ -18,13 +18,7 @@ class App
 	}
 
 	public function startInBackground() {
-
-		if(!$this->ping('127.0.0.1:8077/test.php')) {
-			$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8077 -t ../www";
-			$WshShell = new COM("WScript.Shell");
-			$oExec = $WshShell->Run($cmd, 0, false);
-		}
-		if(!$this->ping('127.0.0.1:8099/test.php')) {
+		if(!$this->ping('127.0.0.1:8099/test.php') and !isset($_GET['act'])) {
 			$cmd = "cmd /C cd.. && cd php && php -S 0.0.0.0:8099 -t ../www";
 			$WshShell = new COM("WScript.Shell");
 			$oExec = $WshShell->Run($cmd, 0, false);

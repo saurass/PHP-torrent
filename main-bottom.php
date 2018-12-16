@@ -24,11 +24,11 @@
 			            // refreshFiles();
 			        }
 			    };
-			    xmlhttp.open("GET", "http://localhost:8077/active.php", true);
+			    xmlhttp.open("GET", "activate.php?act=<?php isset($_GET['act']) ? $abc=0 : $abc=1; echo $abc; ?>", true);
 			    xmlhttp.send();
 			}
-			setInterval(requestActive, 10000);
-			// requestActive();
+			// setInterval(requestActive, 10000);
+			requestActive();
 
 			function refreshFiles(){
 				var xmlhttp = new XMLHttpRequest();

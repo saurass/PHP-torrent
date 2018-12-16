@@ -31,11 +31,12 @@ function processShare($file, $db) {
     $status = '1';
     $created_at = time();
     $updated_at = time();
+    $file_size = filesize($file_loc);
 
 
-    $query = "INSERT INTO files VALUES ('', '$title', '$file_hash', '$mime_type', '$orig_name', '$server_loc', '$server_pub', '$file_loc', '$status', '$created_at', '$updated_at')";
+    $query = "INSERT INTO files VALUES ('', '$title', '$file_hash', '$mime_type', '$orig_name', '$server_loc', '$file_loc', '$status', '$server_pub', '$file_size' ,'$created_at', '$updated_at')";
 
-    $query2 = "INSERT INTO files VALUES ('$title', '$file_hash', '$mime_type', '$orig_name', '$file_loc')"; 
+    $query2 = "INSERT INTO files VALUES ('$title', '$file_hash', '$mime_type', '$orig_name', '$file_loc', '1', '$file_size', '$file_size')";
 
     $db->query($query);
     $db->exec($query2);

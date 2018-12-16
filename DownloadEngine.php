@@ -7,10 +7,11 @@ class DownloadEngine {
     private $delay = 0;
     private $size = 0;
     private $filehash;
+    private $filename;
     function __construct($file, $filehash, $delay = 0) {
         if (! is_file($file)) {
             header("HTTP/1.1 400 Invalid Request");
-            die("<h3>File Not Found</h3>");
+            die("<h3>File Not Found</h3><script>window.location='index.php?act=0'</script>");
         }
         $this->size = filesize($file);
         $this->file = fopen($file, "r");
@@ -101,22 +102,56 @@ class DownloadEngine {
         );
     }
     private function readFile() {
-        while ( ! feof($this->file) ) {
-            echo fgets($this->file);
-            flush();
-            usleep($this->delay);
+        while (1) {
+            if (!feof($this->file)) {
+                echo fgets($this->file);
+                flush();
+                usleep($this->delay);
+            } else {
+                $this->downloadComplete($this->filehash);
+            }
         }
     }
     private function readBuffer($bytes, $size = 1024) {
         $bytesLeft = $bytes;
-        while ( $bytesLeft > 0 && ! feof($this->file) ) {
-            $bytesLeft > $size ? $bytesRead = $size : $bytesRead = $bytesLeft;
-            $bytesLeft -= $bytesRead;
-            echo fread($this->file, $bytesRead);
-            flush();
-            usleep($this->delay);
+        while ( $bytesLeft > 0 ) {
+            if(!feof($this->file)) {
+                $bytesLeft > $size ? $bytesRead = $size : $bytesRead = $bytesLeft;
+                $bytesLeft -= $bytesRead;
+                echo fread($this->file, $bytesRead);
+                flush();
+                usleep($this->delay);
+            } else {
+                $this->downloadComplete($this->filehash);
+            }
         }
     }
+
+    public function readfile_chunked() {
+        $filename = $this->filename;
+        $buffer = "";
+        $cnt =0;
+        $handle = fopen($filename, "rb");
+        if ($handle === false) {
+            return false;
+        }
+        while (!feof($handle)) {
+            $buffer = fread($handle, 1024*1024);
+            echo $buffer;
+            // Never use this
+            // ob_flush();
+            flush();
+            if ($retbytes) {
+                $cnt += strlen($buffer);
+            }
+        }
+        $status = fclose($handle);
+        if ($retbytes and $status) {
+            return $cnt;
+        }
+        return $status;
+    }
+
 }
 
 ?>

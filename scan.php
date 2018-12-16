@@ -1,6 +1,6 @@
 <pre>
 <?php
-$alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	$alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	for($i = 0; $i < 26; $i++) {
 		$dir = $alphabets[$i].":";
 		if(is_dir($dir)) {
