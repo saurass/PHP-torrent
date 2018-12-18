@@ -35,12 +35,25 @@
 			    xmlhttp.onreadystatechange = function() {
 			        if (this.readyState == 4 && this.status == 200) {
 			            document.getElementById('files_container').innerHTML = this.responseText;
+			            uploadFinder();
 			        }
 			    };
 			    xmlhttp.open("GET", "response.php", true);
 			    xmlhttp.send();
 			}
 			setInterval(refreshFiles, 10000);
+
+
+			function uploadFinder(){
+				var xmlhttp = new XMLHttpRequest();
+			    xmlhttp.onreadystatechange = function() {
+			        if (this.readyState == 4 && this.status == 200) {
+			        	
+			        }
+			    };
+			    xmlhttp.open("GET", "uploadFinder.php", true);
+			    xmlhttp.send();
+			}
 
 			function next(dir){
 				var xmlhttp = new XMLHttpRequest();
